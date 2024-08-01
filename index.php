@@ -32,9 +32,28 @@
 
                 $matematica = new Matematica();
 
+                // Função para verificar se algum numeral romano foi repetido mais de três vezes consecutivas
+                function hasInvalidRomanSequence($romanInput) {
+                    $invalidSequences = ['IIII', 'VVVV', 'XXXX', 'LLLL', 'CCCC', 'DDDD', 'MMMM'];
+                    foreach ($invalidSequences as $sequence) {
+                        if (strpos($romanInput, $sequence) !== false) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
                 // Processa a conversão de Romano para Decimal
                 if (isset($_POST['convertToDecimal'])) {
                     $romanInput = $_POST['romanoInput'] ?? '';
+
+                    $romanInput = strtoupper($romanInput);
+
+                    if (hasInvalidRomanSequence($romanInput)) {
+                        echo "Você não pode repetir numerais romanos mais de três vezes consecutivas.";
+                        return;
+                    }
+
                     if (!empty($romanInput)) {
                         $matematica->convertToRomano(strtoupper($romanInput));
                         echo "Número Decimal: " . $matematica->getDecimal();
